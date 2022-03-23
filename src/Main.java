@@ -1,5 +1,5 @@
-import dwelling.DwellingFloor;
-import dwelling.Flat;
+import buildings.DwellingFloor;
+import buildings.Flat;
 
 public class Main {
     public static void main(String[] args) {
