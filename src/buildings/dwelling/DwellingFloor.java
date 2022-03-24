@@ -1,4 +1,4 @@
-package buildings;
+package buildings.dwelling;
 
 public class DwellingFloor {
     private Flat[] flats;

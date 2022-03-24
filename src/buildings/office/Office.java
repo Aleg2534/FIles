@@ -1,24 +1,24 @@
-package buildings;
+package buildings.office;
 
-public class Flat {
-  private double square;
-  private int numberRooms;
+public class Office {
+    private double square;
+    private int numberRooms;
 
 
-  private final double SQUARE = 50;
-  private final int NUMBER_ROOMS = 2;
+    private final double SQUARE = 250;
+    private final int NUMBER_ROOMS = 1;
 
-    public Flat() {
+    public Office() {
         square= SQUARE;
         numberRooms=NUMBER_ROOMS;
     }
 
-    public Flat(double square) {
+    public Office(double square) {
         this.square = square;
         numberRooms=NUMBER_ROOMS;
     }
 
-    public Flat(double square, int numberRooms) {
+    public Office(double square, int numberRooms) {
         this.square = square;
         this.numberRooms = numberRooms;
     }
