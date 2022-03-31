@@ -45,6 +45,46 @@ public class OfficeFloor {
         return square;
     }
 
+    public int getOfficeFloorNumberRooms()
+    {
+        OneList node = listOffices.getNextOffice();
+        int number=node.getOffice().getNumberRooms();
+        while(node!=listOffices)
+        {
+            number+=node.getOffice().getNumberRooms();
+            node=node.getNextOffice();
+        }
+        return number;
+    }
+
+    public Office getOffice(int numberOffice)
+    {
+        if(numberOffice>getNumberOffices())
+        {
+            return null;
+        }
+        OneList node = listOffices;
+        for(int i=0;i<numberOffice;i++){
+            node=node.getNextOffice();
+        }
+        return node.getOffice();
+    }
+
+    public Office[] getArrayOffices()
+    {
+        Office[] arrayOffices=new Office[getNumberOffices()];
+        OneList node = listOffices.getNextOffice();
+        arrayOffices[0]=listOffices.getOffice();
+        int i=1;
+        while (node!=listOffices)
+        {
+            arrayOffices[i]=node.getOffice();
+            node=node.getNextOffice();
+            i++;
+        }
+        return arrayOffices;
+    }
+
     public int getNumberOffices()
     {
         OneList node = listOffices.getNextOffice();
@@ -52,7 +92,24 @@ public class OfficeFloor {
         while(node!=listOffices)
         {
             numberOffices++;
+            node=node.getNextOffice();
         }
         return numberOffices;
     }
+
+    public Office getBestSpace()
+    {
+        OneList node =listOffices.getNextOffice();
+        Office bestSpace=listOffices.getOffice();
+        while(node!=listOffices)
+        {
+            if(bestSpace.getSquare()<node.getOffice().getSquare())
+            {
+                bestSpace=node.getOffice();
+            }
+            node=node.getNextOffice();
+        }
+        return bestSpace;
+    }
+
 }
