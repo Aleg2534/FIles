@@ -1,6 +1,7 @@
 package buildings.office;
 
 import buildings.office.oneList.OneList;
+import exceptions.SpaceIndexOutOfBoundsException;
 
 public class OfficeFloor {
     private OneList listOffices;
@@ -57,8 +58,12 @@ public class OfficeFloor {
         return number;
     }
 
-    public Office getOffice(int numberOffice)
+    public Office getOffice(int numberOffice) throws SpaceIndexOutOfBoundsException
     {
+        if((numberOffice<0)||(numberOffice>=getNumberOffices()))
+        {
+            throw new SpaceIndexOutOfBoundsException(getNumberOffices(), numberOffice);
+        }
         if(numberOffice>getNumberOffices())
         {
             return null;

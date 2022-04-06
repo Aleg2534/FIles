@@ -1,5 +1,7 @@
 package buildings.dwelling;
 
+import exceptions.SpaceIndexOutOfBoundsException;
+
 public class DwellingFloor {
     private Flat[] flats;
 
@@ -15,7 +17,7 @@ public class DwellingFloor {
         this.flats = flats;
     }
 
-    public int getNumberFlats() {
+    public int getNumberSpaces() {
         return flats.length;
     }
 
@@ -40,20 +42,28 @@ public class DwellingFloor {
         return flats;
     }
 
-    public Flat getFlatByNumber(int flatNumber) {
+    public Flat getFlatByNumber(int flatNumber) throws SpaceIndexOutOfBoundsException {
+        if((flatNumber<0)||(flatNumber>=flats.length))
+        {
+            throw new SpaceIndexOutOfBoundsException(flats.length, flatNumber);
+        }
         return flats[flatNumber];
     }
 
-    public void changeFlat(int flatNumber, Flat newFlat) {
+    public void changeFlat(int flatNumber, Flat newFlat) throws SpaceIndexOutOfBoundsException {
+        if((flatNumber<0)||(flatNumber>=flats.length))
+        {
+            throw new SpaceIndexOutOfBoundsException(flats.length, flatNumber);
+        }
         if(flatNumber<flats.length) {
             flats[flatNumber] = newFlat;
         }
     }
 
-    public void addingFlat(int flatNumber, Flat newFlat) {
-        if(flatNumber>flats.length || flatNumber<0)
+    public void addingFlat(int flatNumber, Flat newFlat) throws SpaceIndexOutOfBoundsException {
+        if((flatNumber<0)||(flatNumber>=flats.length))
         {
-            System.out.println("incorrect number of flat");
+            throw new SpaceIndexOutOfBoundsException(flats.length, flatNumber);
         }
         else {
             int i;
@@ -72,11 +82,11 @@ public class DwellingFloor {
             flats=flatsNew;
         }
     }
-    public void removeFlat(int flatNumber)
+    public void removeFlat(int flatNumber) throws SpaceIndexOutOfBoundsException
     {
-        if(flatNumber>flats.length - 1 || flatNumber<0)
+        if((flatNumber<0)||(flatNumber>=flats.length))
         {
-            System.out.println("incorrect number of flat");
+            throw new SpaceIndexOutOfBoundsException(flats.length, flatNumber);
         }
         else{
             int i;

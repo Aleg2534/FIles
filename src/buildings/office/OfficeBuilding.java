@@ -60,9 +60,10 @@ public class OfficeBuilding {
             number++;
             node=node.getNextOfficeFloor();
         }
+        return number;
     }
 
-    public int GetOfficeBuildingNumberRooms()
+    public int getOfficeBuildingNumberRooms()
     {
         TwoList node = listOfficeFloors.getNextOfficeFloor();
         int number=node.getOfficeFloor().getOfficeFloorNumberRooms();
