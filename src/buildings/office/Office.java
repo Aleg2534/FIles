@@ -1,6 +1,9 @@
 package buildings.office;
 
-public class Office {
+import buildings.interfaces.Space;
+import exceptions.InvalidRoomsCountExceptions;
+
+public class Office implements Space {
     private double square;
     private int numberRooms;
 
@@ -18,7 +21,11 @@ public class Office {
         numberRooms=NUMBER_ROOMS;
     }
 
-    public Office(double square, int numberRooms) {
+    public Office(double square, int numberRooms) throws InvalidRoomsCountExceptions {
+        if(numberRooms>7 || numberRooms<0)
+        {
+            throw new InvalidRoomsCountExceptions(numberRooms);
+        }
         this.square = square;
         this.numberRooms = numberRooms;
     }
@@ -35,7 +42,11 @@ public class Office {
         return numberRooms;
     }
 
-    public void setNumberRooms(int numberRooms) {
+    public void setNumberRooms(int numberRooms) throws InvalidRoomsCountExceptions {
+        if(numberRooms>7 || numberRooms<0)
+        {
+            throw new InvalidRoomsCountExceptions(numberRooms);
+        }
         this.numberRooms = numberRooms;
     }
 }

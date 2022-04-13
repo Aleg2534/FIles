@@ -1,9 +1,11 @@
 package buildings.dwelling;
 
+import buildings.interfaces.Floor;
+import buildings.interfaces.Space;
 import exceptions.SpaceIndexOutOfBoundsException;
 
-public class DwellingFloor {
-    private Flat[] flats;
+public class DwellingFloor implements Floor {
+    private Space[] flats;
 
     public DwellingFloor(int numberFlats) {
         flats = new Flat[numberFlats];
@@ -13,66 +15,73 @@ public class DwellingFloor {
         }
     }
 
-    public DwellingFloor(Flat[] flats) {
+    public DwellingFloor(Space[] flats) {
         this.flats = flats;
     }
 
-    public int getNumberSpaces() {
+    @Override
+    public int getNumberOfSpaces() {
         return flats.length;
     }
 
-    public double getFloorSquare() {
+    @Override
+    public Space[] getFloor() {
+        return flats;
+    }
+
+    @Override
+    public double getSquare() {
         double sumSquare = 0;
-        for (Flat flat : flats) {
+        for (Space flat : flats) {
             sumSquare += flat.getSquare();
         }
         return sumSquare;
     }
 
-    public int getNumberRoomsOnFloor() {
+    @Override
+    public int getNumberRooms() {
         int numberFlats=0;
-        for(Flat flat: flats)
+        for(Space flat: flats)
         {
             numberFlats += flat.getNumberRooms();
         }
         return numberFlats;
     }
 
-    public Flat[] getFlats() {
-        return flats;
+    @Override
+    public Space getSpace(int number) throws SpaceIndexOutOfBoundsException {
+        if((number<0)||(number>=flats.length))
+        {
+            throw new SpaceIndexOutOfBoundsException(flats.length, number);
+        }
+        return flats[number];
     }
 
-    public Flat getFlatByNumber(int flatNumber) throws SpaceIndexOutOfBoundsException {
-        if((flatNumber<0)||(flatNumber>=flats.length))
+    @Override
+    public void setSpace(int number, Space newSpace) throws SpaceIndexOutOfBoundsException{
+        if((number<0)||(number>=flats.length))
         {
-            throw new SpaceIndexOutOfBoundsException(flats.length, flatNumber);
+            throw new SpaceIndexOutOfBoundsException(flats.length, number);
         }
-        return flats[flatNumber];
-    }
-
-    public void changeFlat(int flatNumber, Flat newFlat) throws SpaceIndexOutOfBoundsException {
-        if((flatNumber<0)||(flatNumber>=flats.length))
-        {
-            throw new SpaceIndexOutOfBoundsException(flats.length, flatNumber);
-        }
-        if(flatNumber<flats.length) {
-            flats[flatNumber] = newFlat;
+        if(number<flats.length) {
+            flats[number] = newSpace;
         }
     }
 
-    public void addingFlat(int flatNumber, Flat newFlat) throws SpaceIndexOutOfBoundsException {
-        if((flatNumber<0)||(flatNumber>=flats.length))
+    @Override
+    public void addSpace(int number, Space newSpace) {
+        if((number<0)||(number>flats.length))
         {
-            throw new SpaceIndexOutOfBoundsException(flats.length, flatNumber);
+            throw new SpaceIndexOutOfBoundsException(flats.length, number);
         }
         else {
             int i;
-            Flat[] flatsNew = new Flat[flats.length + 1];
-            for (i = 0; i < flatNumber; i++) {
+            Space[] flatsNew = new Flat[flats.length + 1];
+            for (i = 0; i < number; i++) {
                 flatsNew[i] = flats[i];
             }
-            flatsNew[i] = newFlat;
-            if(flatNumber<flats.length)
+            flatsNew[i] = newSpace;
+            if(number<flats.length)
             {
                 i++;
                 for (i = i; i < flatsNew.length + 1; i++) {
@@ -82,20 +91,21 @@ public class DwellingFloor {
             flats=flatsNew;
         }
     }
-    public void removeFlat(int flatNumber) throws SpaceIndexOutOfBoundsException
-    {
-        if((flatNumber<0)||(flatNumber>=flats.length))
+
+    @Override
+    public void deleteSpace(int number) {
+        if((number<0)||(number>=flats.length))
         {
-            throw new SpaceIndexOutOfBoundsException(flats.length, flatNumber);
+            throw new SpaceIndexOutOfBoundsException(flats.length, number);
         }
         else{
             int i;
-            Flat[] flatsNew = new Flat[flats.length - 1];
+           Space[] flatsNew = new Flat[flats.length - 1];
             for (i = 0; i < flats.length; i++) {
-                if(flatNumber>i) {
+                if(number>i) {
                     flatsNew[i] = flats[i];
                 }
-                else if(flatNumber<i)
+                else if(number<i)
                 {
                     flatsNew[i-1]=flats[i];
                 }
@@ -104,7 +114,7 @@ public class DwellingFloor {
         }
     }
 
-    public Flat getBestSpace()
+    public Space getBestSpace()
     {
         int numberBestFlat=0;
         for(int i = 1; i<flats.length;i++) {

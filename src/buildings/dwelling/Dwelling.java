@@ -1,12 +1,13 @@
 package buildings.dwelling;
 
 import exceptions.FloorIndexOutOfBoundsException;
+import exceptions.InvalidRoomsCountExceptions;
 import exceptions.SpaceIndexOutOfBoundsException;
 
 public class Dwelling {
     private DwellingFloor[] dwellingFloors;
 
-    public Dwelling(int numberOfFloors, int... numbersOfFlats) throws ArrayIndexOutOfBoundsException{
+    public Dwelling(int numberOfFloors, int... numbersOfFlats) throws ArrayIndexOutOfBoundsException, InvalidRoomsCountExceptions {
         if(numbersOfFlats.length<numberOfFloors)
         {
             throw new ArrayIndexOutOfBoundsException();
@@ -14,6 +15,10 @@ public class Dwelling {
         dwellingFloors= new DwellingFloor[numberOfFloors];
         for(int i = 0; i<numberOfFloors;i++)
         {
+            if((numbersOfFlats[i]>7) ||(numbersOfFlats[i]<1))
+            {
+                throw new InvalidRoomsCountExceptions(numbersOfFlats[i]);
+            }
             dwellingFloors[i]=new DwellingFloor(numbersOfFlats[i]);
         }
     }
