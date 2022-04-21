@@ -1,27 +1,27 @@
 package buildings.office.oneList;
 
+import buildings.interfaces.Space;
 import buildings.office.Office;
-
 public class OneList {
-    private Office office;
+    private Space space;
     private OneList nextOffice;
 
-    public OneList(Office office) {
-        this.office = office;
+    public OneList(Space office) {
+        this.space = office;
         nextOffice=this;
     }
 
-    public OneList(Office office, OneList nextOffice) {
-        this.office = office;
+    public OneList(Space office, OneList nextOffice) {
+        this.space = office;
         this.nextOffice = nextOffice;
     }
 
-    public Office getOffice() {
-        return office;
+    public Space getSpace() {
+        return space;
     }
 
-    public void setOffice(Office office) {
-        this.office = office;
+    public void setSpace(Space space) {
+        this.space = space;
     }
 
     public OneList getNextOffice() {
@@ -32,10 +32,12 @@ public class OneList {
         this.nextOffice = nextOffice;
     }
 
-    public void addOffice(Office office)
+    public void addSpace(Space office)
     {
         nextOffice=new OneList(office,nextOffice);
     }
+
+    public void deleteNextSpace(){nextOffice=nextOffice.nextOffice;}
 }
 
 

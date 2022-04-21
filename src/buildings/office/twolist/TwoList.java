@@ -1,29 +1,31 @@
 package buildings.office.twolist;
 
+import buildings.interfaces.Floor;
+import buildings.office.Office;
 import buildings.office.OfficeFloor;
 
 public class TwoList {
-    private OfficeFloor officeFloor;
+    private Floor officeFloor;
     private TwoList nextOfficeFloor;
     private TwoList backOfficeFloor;
 
-    public TwoList(OfficeFloor officeFloor) {
+    public TwoList(Floor officeFloor) {
         this.officeFloor = officeFloor;
         nextOfficeFloor=this;
         backOfficeFloor=this;
     }
 
-    public TwoList(OfficeFloor officeFloor, TwoList nextOfficeFloor, TwoList backOfficeFloor) {
+    public TwoList(Floor officeFloor, TwoList nextOfficeFloor, TwoList backOfficeFloor) {
         this.officeFloor = officeFloor;
         this.nextOfficeFloor = nextOfficeFloor;
         this.backOfficeFloor = backOfficeFloor;
     }
 
-    public OfficeFloor getOfficeFloor() {
+    public Floor getOfficeFloor() {
         return officeFloor;
     }
 
-    public void setOfficeFloor(OfficeFloor officeFloor) {
+    public void setOfficeFloor(Floor officeFloor) {
         this.officeFloor = officeFloor;
     }
 

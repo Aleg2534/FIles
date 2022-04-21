@@ -1,16 +1,18 @@
 package buildings.office;
 
+import buildings.interfaces.Floor;
+import buildings.interfaces.Space;
 import buildings.office.oneList.OneList;
 import exceptions.SpaceIndexOutOfBoundsException;
 
-public class OfficeFloor {
+public class OfficeFloor implements Floor {
     private OneList listOffices;
 
     public OfficeFloor(int numberOffices) {
         listOffices= new OneList(new Office());
         for(int i=1;i<numberOffices;i++)
         {
-            listOffices.addOffice(new Office());
+            listOffices.addSpace(new Office());
         }
     }
 
@@ -22,7 +24,7 @@ public class OfficeFloor {
         listOffices = new OneList(offices[0]);
         for(int i=1;i<offices.length;i++)
         {
-            listOffices.addOffice(offices[i]);
+            listOffices.addSpace(offices[i]);
         }
     }
 
@@ -34,64 +36,10 @@ public class OfficeFloor {
         this.listOffices = listOffices;
     }
 
-    public double getOfficeFloorSquare()
-    {
-        OneList node = listOffices.getNextOffice();
-        double square=node.getOffice().getSquare();
-        while(node!=listOffices)
-        {
-            square+=node.getNextOffice().getOffice().getSquare();
-            node=node.getNextOffice();
-        }
-        return square;
-    }
 
-    public int getOfficeFloorNumberRooms()
-    {
-        OneList node = listOffices.getNextOffice();
-        int number=node.getOffice().getNumberRooms();
-        while(node!=listOffices)
-        {
-            number+=node.getOffice().getNumberRooms();
-            node=node.getNextOffice();
-        }
-        return number;
-    }
 
-    public Office getOffice(int numberOffice) throws SpaceIndexOutOfBoundsException
-    {
-        if((numberOffice<0)||(numberOffice>=getNumberOffices()))
-        {
-            throw new SpaceIndexOutOfBoundsException(getNumberOffices(), numberOffice);
-        }
-        if(numberOffice>getNumberOffices())
-        {
-            return null;
-        }
-        OneList node = listOffices;
-        for(int i=0;i<numberOffice;i++){
-            node=node.getNextOffice();
-        }
-        return node.getOffice();
-    }
-
-    public Office[] getArrayOffices()
-    {
-        Office[] arrayOffices=new Office[getNumberOffices()];
-        OneList node = listOffices.getNextOffice();
-        arrayOffices[0]=listOffices.getOffice();
-        int i=1;
-        while (node!=listOffices)
-        {
-            arrayOffices[i]=node.getOffice();
-            node=node.getNextOffice();
-            i++;
-        }
-        return arrayOffices;
-    }
-
-    public int getNumberOffices()
-    {
+    @Override
+    public int getNumberOfSpaces() {
         OneList node = listOffices.getNextOffice();
         int numberOffices=1;
         while(node!=listOffices)
@@ -102,15 +50,119 @@ public class OfficeFloor {
         return numberOffices;
     }
 
-    public Office getBestSpace()
-    {
-        OneList node =listOffices.getNextOffice();
-        Office bestSpace=listOffices.getOffice();
+    @Override
+    public Space[] getFloor() {
+        Space[] arrayOffices=new Office[getNumberOfSpaces()];
+        OneList node = listOffices.getNextOffice();
+        arrayOffices[0]=listOffices.getSpace();
+        int i=1;
+        while (node!=listOffices)
+        {
+            arrayOffices[i]=node.getSpace();
+            node=node.getNextOffice();
+            i++;
+        }
+        return arrayOffices;
+    }
+
+    @Override
+    public double getSquare() {
+        OneList node = listOffices.getNextOffice();
+        double square=node.getSpace().getSquare();
         while(node!=listOffices)
         {
-            if(bestSpace.getSquare()<node.getOffice().getSquare())
+            square+=node.getNextOffice().getSpace().getSquare();
+            node=node.getNextOffice();
+        }
+        return square;
+    }
+
+    @Override
+    public int getNumberRooms() {
+        OneList node = listOffices.getNextOffice();
+        int number=node.getSpace().getNumberRooms();
+        while(node!=listOffices)
+        {
+            number+=node.getSpace().getNumberRooms();
+            node=node.getNextOffice();
+        }
+        return number;
+    }
+
+
+
+    @Override
+    public Space getSpace(int number) throws SpaceIndexOutOfBoundsException {
+        if(number>=getNumberOfSpaces() || number<0)
+        {
+            throw new SpaceIndexOutOfBoundsException(getNumberOfSpaces(),number);
+        }
+        int i = 0;
+        OneList nowSpace = listOffices;
+        while (i!=number)
+        {
+            i++;
+            nowSpace=nowSpace.getNextOffice();
+        }
+        return nowSpace.getSpace();
+    }
+
+    @Override
+    public void setSpace(int number, Space newSpace) throws SpaceIndexOutOfBoundsException{
+        if(number>=getNumberOfSpaces() || number<0)
+        {
+            throw new SpaceIndexOutOfBoundsException(getNumberOfSpaces(),number);
+        }
+        int i = 0;
+        OneList nowSpace = listOffices;
+        while (i!=number)
+        {
+            i++;
+            nowSpace=nowSpace.getNextOffice();
+        }
+        nowSpace.setSpace(newSpace);
+    }
+
+    @Override
+    public void addSpace(int number, Space newSpace) throws SpaceIndexOutOfBoundsException{
+        if(number>getNumberOfSpaces() || number<0)
+        {
+            throw new SpaceIndexOutOfBoundsException(getNumberOfSpaces(),number);
+        }
+        int i = 0;
+        OneList nowSpace = listOffices;
+        while (i!=number) {
+            i++;
+            nowSpace = nowSpace.getNextOffice();
+        }
+        nowSpace.addSpace(newSpace);
+    }
+
+    @Override
+    public void deleteSpace(int number) throws SpaceIndexOutOfBoundsException{
+        if(number>=getNumberOfSpaces() || number<0)
+        {
+            throw new SpaceIndexOutOfBoundsException(getNumberOfSpaces(),number);
+        }
+        int i = 0;
+        OneList nowSpace = listOffices;
+        while (i!=number-1)
+        {
+            i++;
+            nowSpace=nowSpace.getNextOffice();
+        }
+        nowSpace.deleteNextSpace();
+    }
+
+    public Space getBestSpace()
+    {
+        OneList node =listOffices.getNextOffice();
+        Space bestSpace=listOffices.getSpace();
+        while(node!=listOffices)
+        {
+            if(bestSpace.getSquare()<node.getSpace().getSquare())
             {
-                bestSpace=node.getOffice();
+                bestSpace=node.getSpace();
             }
             node=node.getNextOffice();
         }
