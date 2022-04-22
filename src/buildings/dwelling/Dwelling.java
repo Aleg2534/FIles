@@ -26,6 +26,14 @@ public class Dwelling implements Building {
             dwellingFloors[i]=new DwellingFloor(numbersOfFlats[i]);
         }
     }
+    public Dwelling(int numberOfFloors) throws FloorIndexOutOfBoundsException
+    {
+        if(numberOfFloors>100 || numberOfFloors <1 )
+        {
+            throw new FloorIndexOutOfBoundsException(100,numberOfFloors);
+        }
+        dwellingFloors = new DwellingFloor[numberOfFloors];
+    }
 
     public Dwelling(DwellingFloor... dwellingFloors) {
         this.dwellingFloors = dwellingFloors;

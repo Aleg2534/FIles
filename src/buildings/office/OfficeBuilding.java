@@ -85,7 +85,7 @@ public class OfficeBuilding implements Building {
         int i =0,k=0;
         TwoList twoList = listOfficeFloors;
         Space[] Spaces= new Space[getNumberSpaces()];
-        while (i<getBuildingSize())
+        while (i<getNumberFloors())
         {
             int j = 0;
             while (j<twoList.getOfficeFloor().getNumberOfSpaces())
@@ -105,7 +105,7 @@ public class OfficeBuilding implements Building {
         int i =0,number=0;
         TwoList twoList = listOfficeFloors;
         Space[] Spaces= new Space[getNumberSpaces()];
-        while (i<getBuildingSize())
+        while (i<getNumberFloors())
         {
             i++;
             number+=twoList.getOfficeFloor().getNumberOfSpaces();
@@ -249,7 +249,7 @@ public class OfficeBuilding implements Building {
     public Space[] getListOffices()
     {
         int i=0;
-        Space[] arrayOffices=new Office[getBuildingSize()];
+        Space[] arrayOffices=new Office[getNumberSpaces()];
         TwoList node=listOfficeFloors.getNextOfficeFloor();
         for(i=i;i<listOfficeFloors.getOfficeFloor().getNumberOfSpaces();i++)
         {
