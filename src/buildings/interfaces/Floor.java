@@ -1,6 +1,6 @@
 package buildings.interfaces;
 
-public interface Floor {
+public interface Floor{
     int getNumberOfSpaces();
     Space[] getFloor();
     double getSquare();

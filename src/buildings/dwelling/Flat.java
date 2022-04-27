@@ -3,7 +3,9 @@ package buildings.dwelling;
 import buildings.interfaces.Space;
 import exceptions.InvalidRoomsCountExceptions;
 
-public class Flat implements Space {
+import java.io.Serializable;
+
+public class Flat implements Space, Serializable {
   private double square;
   private int numberRooms;
 

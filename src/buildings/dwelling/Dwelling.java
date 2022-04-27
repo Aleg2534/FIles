@@ -8,7 +8,9 @@ import exceptions.FloorIndexOutOfBoundsException;
 import exceptions.InvalidRoomsCountExceptions;
 import exceptions.SpaceIndexOutOfBoundsException;
 
-public class Dwelling implements Building {
+import java.io.Serializable;
+
+public class Dwelling implements Building, Serializable {
     private Floor[] dwellingFloors;
 
     public Dwelling(int numberOfFloors, int... numbersOfFlats) throws ArrayIndexOutOfBoundsException, InvalidRoomsCountExceptions {

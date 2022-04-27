@@ -5,7 +5,9 @@ import buildings.interfaces.Floor;
 import buildings.interfaces.Space;
 import buildings.office.twolist.TwoList;
 
-public class OfficeBuilding implements Building {
+import java.io.Serializable;
+
+public class OfficeBuilding implements Building, Serializable {
     TwoList listOfficeFloors;
 
     public OfficeBuilding(TwoList listOfficeFloors) {
