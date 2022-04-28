@@ -8,6 +8,7 @@ import buildings.interfaces.Floor;
 import buildings.interfaces.Space;
 
 import java.io.*;
+import java.util.Formatter;
 
 public class Buildings {
     public static void outputBuilding(Building building, OutputStream stream) throws IOException {
@@ -51,15 +52,15 @@ public class Buildings {
     }
 
     public static Building readBuilding(Reader stream) throws IOException {
-        StreamTokenizer streamTokenizer= new StreamTokenizer(stream);
+        StreamTokenizer streamTokenizer = new StreamTokenizer(stream);
         streamTokenizer.nextToken();
-        Building building = new Dwelling((int)streamTokenizer.nval);
+        Building building = new Dwelling((int) streamTokenizer.nval);
         streamTokenizer.nextToken();
         for (int i = 0; i < building.getNumberFloors(); i++) {
-            Floor floor = new DwellingFloor((int)streamTokenizer.nval);
+            Floor floor = new DwellingFloor((int) streamTokenizer.nval);
             streamTokenizer.nextToken();
             for (int j = 0; j < floor.getNumberOfSpaces(); j++) {
-                int numberRooms = (int)streamTokenizer.nval;
+                int numberRooms = (int) streamTokenizer.nval;
                 streamTokenizer.nextToken();
                 Space space = new Flat(streamTokenizer.nval, numberRooms);
                 streamTokenizer.nextToken();
@@ -71,12 +72,25 @@ public class Buildings {
     }
 
     public static void serializableBuilding(Building building, OutputStream stream) throws IOException {
-        ObjectOutputStream objectOutputStream=new ObjectOutputStream(stream);
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(stream);
         objectOutputStream.writeObject(building);
     }
 
     public static Building deserializableBuilding(InputStream stream) throws IOException, ClassNotFoundException {
-        ObjectInputStream objectOutputStream=new ObjectInputStream(stream);
+        ObjectInputStream objectOutputStream = new ObjectInputStream(stream);
         return (Building) objectOutputStream.readObject();
+    }
+
+    public static void writeBuildingFormat(Building building, Writer stream) {
+        Formatter formatter = new Formatter(stream);
+        formatter.format("Number of floors: %d\n", building.getNumberFloors());
+        for (int i = 0; i < building.getNumberFloors(); i++) {
+            formatter.format("Number of spaces on floor: %d\n", building.getFloor(i).getNumberOfSpaces());
+            for (int j = 0; j < building.getFloor(i).getNumberOfSpaces(); j++) {
+                formatter.format("Number of Space: [%d] Number of rooms: %d Square: %f\n", j,
+                        building.getFloor(i).getSpace(j).getNumberRooms(), building.getFloor(i).getSpace(j).getSquare());
+            }
+        }
+        formatter.flush();
     }
 }

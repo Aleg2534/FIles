@@ -9,7 +9,13 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Building building = Buildings.deserializableBuilding(new FileInputStream("C:\\Users\\Home\\IdeaProjects\\test1\\src\\buildings\\test.txt"));
-        System.out.println(222);
+        try {
+            Building building = new Dwelling(4,2,3,4,5);
+            System.out.println(222);
+            Buildings.writeBuildingFormat(building,
+                    new FileWriter("C:\\Users\\Home\\IdeaProjects\\test1\\src\\buildings\\test.txt"));
+        } finally {
+
+        }
     }
 }
