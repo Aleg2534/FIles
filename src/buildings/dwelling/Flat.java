@@ -51,4 +51,36 @@ public class Flat implements Space, Serializable {
         }
         this.numberRooms = numberRooms;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Flat(" + numberRooms+ ", " + square+")";
+    }
+
+    @Override
+    public boolean equals(Object space)
+    {
+        if(!(space instanceof Flat))
+        {
+            return false;
+        }
+        if(((Flat) space).getNumberRooms()==numberRooms && ((Flat) space).getSquare()==square)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Object clone()
+    {
+       return new Flat(square,numberRooms);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return (int) (getNumberRooms()+getSquare())*2;
+    }
 }

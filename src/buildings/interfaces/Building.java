@@ -1,6 +1,8 @@
 package buildings.interfaces;
 
-public interface Building {
+import buildings.dwelling.Dwelling;
+
+public interface Building extends Iterable<Floor>, Comparable<Building> {
     int getBuildingSize();
     int getNumberRooms();
     int getNumberFloors();

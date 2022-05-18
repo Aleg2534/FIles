@@ -1,6 +1,8 @@
 package buildings.interfaces;
 
-public interface Floor{
+import buildings.dwelling.DwellingFloor;
+
+public interface Floor extends  Iterable<Space>, Comparable<Floor>{
     int getNumberOfSpaces();
     Space[] getFloor();
     double getSquare();

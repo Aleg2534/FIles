@@ -1,17 +1,29 @@
 package buildings.office;
 
+import buildings.dwelling.Dwelling;
 import buildings.interfaces.Building;
 import buildings.interfaces.Floor;
 import buildings.interfaces.Space;
+import buildings.office.oneList.OneList;
 import buildings.office.twolist.TwoList;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 public class OfficeBuilding implements Building, Serializable {
     TwoList listOfficeFloors;
 
     public OfficeBuilding(TwoList listOfficeFloors) {
         this.listOfficeFloors = listOfficeFloors;
+    }
+
+    public OfficeBuilding(Floor[] floors)
+    {
+        listOfficeFloors=new TwoList(floors[0]);
+        for(int i=1;i<floors.length;i++)
+        {
+            listOfficeFloors.addOfficeFloor(floors[i]);
+        }
     }
 
     public  OfficeBuilding(int numberOfficeFloors, int... numbersOffices)
@@ -267,5 +279,58 @@ public class OfficeBuilding implements Building, Serializable {
             node=node.getNextOfficeFloor();
         }
         return arrayOffices;
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder str = new StringBuilder("OfficeBuilding(");
+        TwoList node =listOfficeFloors.getNextOfficeFloor();
+        str.append(listOfficeFloors.getOfficeFloor().toString()+", ");
+        while(node!=listOfficeFloors)
+        {
+            str.append(node.getOfficeFloor().toString());
+            node=node.getNextOfficeFloor();
+        }
+        str.append(")");
+        return str.toString();
+    }
+
+    @Override
+    public Object clone()
+    {
+        Building newOfficeBuilding = new OfficeBuilding(getNumberFloors());
+        for(int i=0;i<getNumberFloors();i++)
+        {
+            newOfficeBuilding.setFloor(i,(Floor) ((OfficeFloor) (getFloor(i))).clone());
+        }
+        return newOfficeBuilding;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return (int) (getNumberRooms()+getSquare())*2;
+    }
+
+    @Override
+    public int compareTo(Building o) {
+        return Integer.compare(getNumberSpaces(), o.getNumberSpaces());
+    }
+
+    @Override
+    public Iterator<Floor> iterator() {
+        return new Iterator<Floor>() {
+            int index=0;
+            @Override
+            public boolean hasNext() {
+                return index<getNumberFloors();
+            }
+
+            @Override
+            public Floor next() {
+                return getFloor(index++);
+            }
+        };
     }
 }

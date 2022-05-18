@@ -45,7 +45,7 @@ public class TwoList {
         this.backOfficeFloor = backOfficeFloor;
     }
 
-    public void addOfficeFloor(OfficeFloor officeFloor)
+    public void addOfficeFloor(Floor officeFloor)
     {
         TwoList newNode= new TwoList(officeFloor, nextOfficeFloor, this);
         newNode.nextOfficeFloor.backOfficeFloor=newNode;
