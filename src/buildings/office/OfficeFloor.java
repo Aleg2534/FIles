@@ -24,7 +24,7 @@ public class OfficeFloor implements Floor {
         this.listOffices = listOffices;
     }
 
-    public OfficeFloor(Office[] offices) {
+    public OfficeFloor(Space[] offices) {
         listOffices = new OneList(offices[0]);
         for (int i = 1; i < offices.length; i++) {
             listOffices.addSpace(offices[i]);

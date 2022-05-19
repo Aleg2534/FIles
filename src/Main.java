@@ -4,6 +4,8 @@ import buildings.dwelling.DwellingFloor;
 import buildings.dwelling.Flat;
 import buildings.dwelling.hotel.Hotel;
 import buildings.dwelling.hotel.HotelFloor;
+import buildings.factories.HotelFactory;
+import buildings.factories.OfficeFactory;
 import buildings.interfaces.Building;
 import buildings.interfaces.Floor;
 import buildings.interfaces.Space;
@@ -16,19 +18,13 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        try {
+        try (Writer outputStream= new FileWriter("C:\\Users\\Home\\IdeaProjects\\test1\\src\\buildings\\test.txt");
+             Reader inputStream = new FileReader("C:\\Users\\Home\\IdeaProjects\\test1\\src\\buildings\\test.txt")) {
             System.out.println(228);
-            Building building = new Hotel(4,2,3,4,5);
-            Building building2 = new Hotel(4,4,3,4,5);
-            building.setFloor(2, new HotelFloor(5));
-            building.setFloor(3, new HotelFloor(5));
-            building.getFloor(3).getSpace(2).setSquare(350);
-            ((HotelFloor)building.getFloor(3)).setStars(5);
-            building.getFloor(2).getSpace(3).setSquare(500);
-            Floor floor= new DwellingFloor(10);
-            for(Space i:floor){
-                System.out.println(i.toString());
-            }
+            Building building = new Dwelling(4, 2, 3, 4, 5);
+            Buildings.writeBuilding(building, outputStream);
+            Buildings.setBuildingFactory(new HotelFactory());
+            System.out.println(Buildings.readBuilding(inputStream).toString());
         } finally {
 
         }

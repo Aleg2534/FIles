@@ -28,7 +28,7 @@ public class HotelFloor extends DwellingFloor {
     @Override
     public String toString()
     {
-        StringBuilder str= new StringBuilder("DwellingFloor( Stars:"+stars+", ");
+        StringBuilder str= new StringBuilder("HotelFloor( Stars:"+stars+", ");
         for(Space i:getFloor())
         {
             str.append(i.toString()+", ");

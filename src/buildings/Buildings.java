@@ -3,7 +3,9 @@ package buildings;
 import buildings.dwelling.Dwelling;
 import buildings.dwelling.DwellingFloor;
 import buildings.dwelling.Flat;
+import buildings.factories.DwellingFactory;
 import buildings.interfaces.Building;
+import buildings.interfaces.BuildingFactory;
 import buildings.interfaces.Floor;
 import buildings.interfaces.Space;
 
@@ -11,6 +13,12 @@ import java.io.*;
 import java.util.Formatter;
 
 public class Buildings {
+    private static BuildingFactory buildingFactory = new DwellingFactory();
+
+    public static void setBuildingFactory(BuildingFactory newBuildingFactory) {
+        buildingFactory = newBuildingFactory;
+    }
+
     public static void outputBuilding(Building building, OutputStream stream) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(stream);
         dataOutputStream.writeInt(building.getNumberFloors());
@@ -26,17 +34,15 @@ public class Buildings {
 
     public static Building inputBuilding(InputStream stream) throws IOException {
         DataInputStream dataInputStream = new DataInputStream(stream);
-        Building building = new Dwelling(dataInputStream.readInt());
-        for (int i = 0; i < building.getNumberFloors(); i++) {
-            Floor floor = new DwellingFloor(dataInputStream.readInt());
-            for (int j = 0; j < floor.getNumberOfSpaces(); j++) {
+        Floor[] floors = new Floor[dataInputStream.readInt()];
+        for (int i = 0; i < floors.length; i++) {
+            floors[i] = createFloor(dataInputStream.readInt());
+            for (int j = 0; j < floors[i].getNumberOfSpaces(); j++) {
                 int numberRooms = dataInputStream.readInt();
-                Space space = new Flat(dataInputStream.readDouble(), numberRooms);
-                floor.setSpace(j, space);
+                floors[i].setSpace(j, createSpace(dataInputStream.readDouble(), numberRooms));
             }
-            building.setFloor(i, floor);
         }
-        return building;
+        return createBuilding(floors);
     }
 
     public static void writeBuilding(Building building, Writer stream) throws IOException {
@@ -54,21 +60,19 @@ public class Buildings {
     public static Building readBuilding(Reader stream) throws IOException {
         StreamTokenizer streamTokenizer = new StreamTokenizer(stream);
         streamTokenizer.nextToken();
-        Building building = new Dwelling((int) streamTokenizer.nval);
+        Floor[] floors = new Floor[(int) streamTokenizer.nval];
         streamTokenizer.nextToken();
-        for (int i = 0; i < building.getNumberFloors(); i++) {
-            Floor floor = new DwellingFloor((int) streamTokenizer.nval);
+        for (int i = 0; i < floors.length; i++) {
+            floors[i] = createFloor((int) streamTokenizer.nval);
             streamTokenizer.nextToken();
-            for (int j = 0; j < floor.getNumberOfSpaces(); j++) {
+            for (int j = 0; j < floors[i].getNumberOfSpaces(); j++) {
                 int numberRooms = (int) streamTokenizer.nval;
                 streamTokenizer.nextToken();
-                Space space = new Flat(streamTokenizer.nval, numberRooms);
+                floors[i].setSpace(j, createSpace(streamTokenizer.nval, numberRooms));
                 streamTokenizer.nextToken();
-                floor.setSpace(j, space);
             }
-            building.setFloor(i, floor);
         }
-        return building;
+        return createBuilding(floors);
     }
 
     public static void serializableBuilding(Building building, OutputStream stream) throws IOException {
@@ -76,9 +80,14 @@ public class Buildings {
         objectOutputStream.writeObject(building);
     }
 
-    public static Building deserializableBuilding(InputStream stream) throws IOException, ClassNotFoundException {
+    public static Building deserializableBuilding(InputStream stream) throws IOException {
         ObjectInputStream objectOutputStream = new ObjectInputStream(stream);
-        return (Building) objectOutputStream.readObject();
+        try {
+            return (Building) objectOutputStream.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void writeBuildingFormat(Building building, Writer stream) {
@@ -92,5 +101,29 @@ public class Buildings {
             }
         }
         formatter.flush();
+    }
+
+    public static Space createSpace(double square) {
+        return buildingFactory.createSpace(square);
+    }
+
+    public static Space createSpace(double square, int numberRooms) {
+        return buildingFactory.createSpace(square, numberRooms);
+    }
+
+    public static Floor createFloor(int numberSpaces) {
+        return buildingFactory.createFloor(numberSpaces);
+    }
+
+    public static Floor createFloor(Space[] spaces) {
+        return buildingFactory.createFloor(spaces);
+    }
+
+    public static Building createBuilding(int numberOfFloors, int... numbersOfSpaces) {
+        return buildingFactory.createBuilding(numberOfFloors, numbersOfSpaces);
+    }
+
+    public static Building createBuilding(Floor[] floors) {
+        return buildingFactory.createBuilding(floors);
     }
 }

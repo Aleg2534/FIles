@@ -85,7 +85,7 @@ public class Hotel extends Dwelling {
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder("Dwelling( Stars:"+stars+", ");
+        StringBuilder str = new StringBuilder("Hotel( Stars:"+stars+", ");
         for (Floor i : getFloors()) {
             str.append(i.toString());
         }
