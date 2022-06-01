@@ -6,7 +6,7 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Semaphore semaphore = new Semaphore(true);
+        Semaphore semaphore = new Semaphore();
         Floor floor = new DwellingFloor(7);
         SequentalRepairer repairer = new SequentalRepairer(floor, semaphore);
         SequentalCleaner cleaner = new SequentalCleaner(floor, semaphore);

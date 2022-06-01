@@ -3,8 +3,8 @@ package threads;
 public class Semaphore {
     private boolean flag;
 
-    public Semaphore(boolean flag) {
-        this.flag = flag;
+    public Semaphore() {
+        this.flag = true;
     }
 
     public void switching() {
@@ -13,9 +13,5 @@ public class Semaphore {
 
     public boolean isFlag() {
         return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
     }
 }
