@@ -83,4 +83,9 @@ public class Flat implements Space, Serializable {
     {
         return (int) (getNumberRooms()+getSquare())*2;
     }
+
+    @Override
+    public int compareTo(Space o) {
+        return (int) (this.square-o.getSquare());
+    }
 }

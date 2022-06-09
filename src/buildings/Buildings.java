@@ -1,8 +1,6 @@
 package buildings;
 
-import buildings.dwelling.Dwelling;
-import buildings.dwelling.DwellingFloor;
-import buildings.dwelling.Flat;
+import buildings.criterions.SpacesRoomsComparator;
 import buildings.factories.DwellingFactory;
 import buildings.interfaces.Building;
 import buildings.interfaces.BuildingFactory;
@@ -10,6 +8,7 @@ import buildings.interfaces.Floor;
 import buildings.interfaces.Space;
 
 import java.io.*;
+import java.util.Comparator;
 import java.util.Formatter;
 
 public class Buildings {
@@ -125,5 +124,75 @@ public class Buildings {
 
     public static Building createBuilding(Floor[] floors) {
         return buildingFactory.createBuilding(floors);
+    }
+
+    public static SynchronizedFloor createSychronizedFloor(Floor floor){
+        return new SynchronizedFloor(floor);
+    }
+
+    public static <T extends Comparable<T>> void sortArrays(T[] array)
+    {
+        for(int i=0;i<array.length;i++)
+        {
+            for(int j=0;j< array.length-i-1;j++)
+            {
+                if(array[j].compareTo(array[j+1])>0)
+                {
+                    T obj = array[j];
+                    array[j]=array[j+1];
+                    array[j+1]=obj;
+                }
+            }
+        }
+    }
+
+    public static void sortedSpacesByCriterion(Space[] array, Comparator<Space> comparator)
+    {
+         new SpacesRoomsComparator();
+        for(int i=0;i<array.length;i++)
+        {
+            for(int j=0;j< array.length-i-1;j++)
+            {
+                if(comparator.compare(array[j],array[j+1])<0)
+                {
+                    Space obj = array[j];
+                    array[j]=array[j+1];
+                    array[j+1]=obj;
+                }
+            }
+        }
+    }
+
+    public static void sortedFloorsByCriterion(Floor[] array, Comparator<Floor> comparator)
+    {
+        for(int i=0;i<array.length;i++)
+        {
+            for(int j=0;j< array.length-i-1;j++)
+            {
+                if(comparator.compare(array[j],array[j+1])<0)
+                {
+                    Floor obj = array[j];
+                    array[j]=array[j+1];
+                    array[j+1]=obj;
+                }
+            }
+        }
+    }
+
+    public static <T> void sortArraysByComparator(T[] array, Comparator<T> comparator)
+    {
+
+        for(int i=0;i<array.length;i++)
+        {
+            for(int j=0;j< array.length-i-1;j++)
+            {
+                if(comparator.compare(array[j],array[j+1])<0)
+                {
+                    T obj = array[j];
+                    array[j]=array[j+1];
+                    array[j+1]=obj;
+                }
+            }
+        }
     }
 }
