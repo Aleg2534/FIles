@@ -53,6 +53,7 @@ public class Buildings {
                 stream.write(building.getFloor(i).getSpace(j).getSquare() + " ");
             }
         }
+        stream.write("\n");
         stream.flush();
     }
 
@@ -60,15 +61,14 @@ public class Buildings {
         StreamTokenizer streamTokenizer = new StreamTokenizer(stream);
         streamTokenizer.nextToken();
         Floor[] floors = new Floor[(int) streamTokenizer.nval];
-        streamTokenizer.nextToken();
         for (int i = 0; i < floors.length; i++) {
-            floors[i] = createFloor((int) streamTokenizer.nval);
             streamTokenizer.nextToken();
+            floors[i] = createFloor((int) streamTokenizer.nval);
             for (int j = 0; j < floors[i].getNumberOfSpaces(); j++) {
+                streamTokenizer.nextToken();
                 int numberRooms = (int) streamTokenizer.nval;
                 streamTokenizer.nextToken();
                 floors[i].setSpace(j, createSpace(streamTokenizer.nval, numberRooms));
-                streamTokenizer.nextToken();
             }
         }
         return createBuilding(floors);
