@@ -35,7 +35,9 @@ public class Buildings {
         DataInputStream dataInputStream = new DataInputStream(stream);
         Floor[] floors = new Floor[dataInputStream.readInt()];
         for (int i = 0; i < floors.length; i++) {
-            floors[i] = createFloor(dataInputStream.readInt());
+            int a = dataInputStream.readInt();
+            System.out.println(a);
+            floors[i] = createFloor(a);
             for (int j = 0; j < floors[i].getNumberOfSpaces(); j++) {
                 int numberRooms = dataInputStream.readInt();
                 floors[i].setSpace(j, createSpace(dataInputStream.readDouble(), numberRooms));

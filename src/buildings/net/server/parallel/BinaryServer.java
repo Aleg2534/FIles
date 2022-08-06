@@ -1,4 +1,4 @@
-package buildings.net.server.sequental;
+package buildings.net.server.parallel;
 
 import buildings.Buildings;
 import buildings.dwelling.Dwelling;
@@ -52,33 +52,43 @@ public class BinaryServer {
         return result;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
+
         try (ServerSocket socket = new ServerSocket(8080)) {
             System.out.println("server started 228");
             Socket clientSocket = socket.accept();
-            DataInputStream dataInputStream = new DataInputStream(clientSocket.getInputStream());
-            DataOutputStream dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
             while (true) {
-                try{
-                    setType(dataInputStream.readUTF());
-                    Building building = Buildings.inputBuilding(dataInputStream);
-                    System.out.println(building.toString());
-                    String result = "";
-                    try {
-                        double price = estimation(building);
-                        System.out.println("Price of building:" + price);
-                        result = Double.toString(price);
-                    } catch (BuildingUnderArrestException e) {
-                        result = "Building is under arrest!";
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DataInputStream dataInputStream = null;
+                        DataOutputStream dataOutputStream = null;
+                        try {
+                            dataInputStream = new DataInputStream(clientSocket.getInputStream());
+                            dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
+                            setType(dataInputStream.readUTF());
+                            Building building = Buildings.inputBuilding(dataInputStream);
+ //                           System.out.println(building.toString());
+                            String result = "";
+                            try {
+                                double price = estimation(building);
+                                System.out.println("Price of building:" + price);
+                                result = Double.toString(price);
+                            } catch (BuildingUnderArrestException e) {
+                                result = "Building is under arrest!";
+                            }
+                            dataOutputStream.writeUTF(result);
+                            dataOutputStream.flush();
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    dataOutputStream.writeUTF(result);
-                    dataOutputStream.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    break;
-                }
+                }).start();
+
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
