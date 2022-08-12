@@ -19,15 +19,9 @@ public class BinaryServer {
 
     private static void setType(String type) {
         switch (type) {
-            case "Dwelling" -> {
-                Buildings.setBuildingFactory(new DwellingFactory());
-            }
-            case "OfficeBuilding" -> {
-                Buildings.setBuildingFactory(new OfficeFactory());
-            }
-            case "Hotel" -> {
-                Buildings.setBuildingFactory(new HotelFactory());
-            }
+            case "Dwelling" -> Buildings.setBuildingFactory(new DwellingFactory());
+            case "OfficeBuilding" -> Buildings.setBuildingFactory(new OfficeFactory());
+            case "Hotel" -> Buildings.setBuildingFactory(new HotelFactory());
             default -> {
             }
         }
@@ -54,42 +48,45 @@ public class BinaryServer {
 
     public static void main(String[] args) {
 
-        try (ServerSocket socket = new ServerSocket(8080)) {
-            System.out.println("server started 228");
-            Socket clientSocket = socket.accept();
-            while (true) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DataInputStream dataInputStream = null;
-                        DataOutputStream dataOutputStream = null;
-                        try {
-                            dataInputStream = new DataInputStream(clientSocket.getInputStream());
-                            dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
-                            setType(dataInputStream.readUTF());
-                            Building building = Buildings.inputBuilding(dataInputStream);
- //                           System.out.println(building.toString());
-                            String result = "";
-                            try {
-                                double price = estimation(building);
-                                System.out.println("Price of building:" + price);
-                                result = Double.toString(price);
-                            } catch (BuildingUnderArrestException e) {
-                                result = "Building is under arrest!";
-                            }
-                            dataOutputStream.writeUTF(result);
-                            dataOutputStream.flush();
-                        }
-                        catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try (ServerSocket socket = new ServerSocket(8080)) {
+                    System.out.println("server started 228");
+                    Socket clientSocket = socket.accept();
+                    System.out.println("Creating dis...");
+                    DataInputStream dataInputStream = new DataInputStream(clientSocket.getInputStream());
+                    System.out.println("Creating dos...");
+                    DataOutputStream dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
+                    while (true) {
+
+                        System.out.println("Reading type...");
+                        String type = dataInputStream.readUTF();
+                        System.out.println("Type: " + type);
+                        System.out.println("Setting type...");
+                        setType(type);
+                        System.out.println("Reading building...");
+                        Building building = Buildings.inputBuilding(dataInputStream);
+                        System.out.println("Building: " + building.toString());
+                        String result;
+                        try {
+                            System.out.println("Calculating price...");
+                            double price = estimation(building);
+                            System.out.println("Price of building:" + price);
+                            result = Double.toString(price);
+                        } catch (BuildingUnderArrestException e) {
+                            result = "Building is under arrest!";
+                        }
+                        System.out.println("Writing result...");
+                        dataOutputStream.writeUTF(result);
+                        System.out.println("Result writing succeed!");
+                        dataOutputStream.flush();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        }).start();
     }
 }
