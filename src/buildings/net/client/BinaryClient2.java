@@ -3,19 +3,15 @@ package buildings.net.client;
 import buildings.Buildings;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
-public class BinaryClient {
-    public static void main(String[] args) {
-        try(ServerSocket serverSocket = new ServerSocket(8000)) {
-            System.out.println("Client started 228");
-            serverSocket.accept();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+public class BinaryClient2 {
+    public static void main(String[] args) throws IOException {
+//        try (Socket socket = new Socket("127.0.0.1", 8000))
+//        {
+//            System.out.println("Client2 started 228");
+//        }
         try (Socket socket = new Socket("127.0.0.1", 8080);
              DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
              DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());

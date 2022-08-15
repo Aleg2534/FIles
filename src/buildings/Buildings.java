@@ -84,7 +84,8 @@ public class Buildings {
     public static Building deserializableBuilding(InputStream stream) throws IOException {
         ObjectInputStream objectOutputStream = new ObjectInputStream(stream);
         try {
-            return (Building) objectOutputStream.readObject();
+            Building building = (Building) objectOutputStream.readObject();
+            return createBuilding(building.getFloors());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
