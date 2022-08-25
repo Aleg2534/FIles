@@ -8,6 +8,7 @@ import buildings.interfaces.Floor;
 import buildings.interfaces.Space;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.Formatter;
 
@@ -121,79 +122,102 @@ public class Buildings {
         return buildingFactory.createFloor(spaces);
     }
 
+    public static <T extends Space> Space createSpace(double square, Class<T> spaceClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return spaceClass.getConstructor(double.class).newInstance(square);
+    }
+
+    public static <T extends Space> Space createSpace(double square, int numberRooms, Class<T> spaceClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return spaceClass.getConstructor(double.class, int.class).newInstance(square, numberRooms);
+    }
+
+    public static <T extends Floor> Floor createFloor(int numberSpaces, Class<T> floorClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return floorClass.getConstructor(int.class).newInstance(numberSpaces);
+    }
+
+    public static <T extends Floor> Floor createFloor(Space[] spaces, Class<T> floorCLass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return floorCLass.getConstructor(Space[].class).newInstance((Object) spaces);
+    }
+
     public static Building createBuilding(int numberOfFloors, int... numbersOfSpaces) {
         return buildingFactory.createBuilding(numberOfFloors, numbersOfSpaces);
+    }
+
+    public static <T extends Building> Building createBuilding(Class<T> buildingClass, int numberOfFloors, int... numbersOfSpaces) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return buildingClass.getConstructor(int.class, int[].class).newInstance(numberOfFloors, numbersOfSpaces);
     }
 
     public static Building createBuilding(Floor[] floors) {
         return buildingFactory.createBuilding(floors);
     }
 
-    public static SynchronizedFloor createSychronizedFloor(Floor floor){
+    public static <T extends Building> Building createBuilding(Floor[] floors, Class<T> buildingClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        try {
+            return buildingClass.getConstructor(Floor[].class).newInstance(floors);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static SynchronizedFloor createSychronizedFloor(Floor floor) {
         return new SynchronizedFloor(floor);
     }
 
-    public static <T extends Comparable<T>> void sortArrays(T[] array)
-    {
-        for(int i=0;i<array.length;i++)
-        {
-            for(int j=0;j< array.length-i-1;j++)
-            {
-                if(array[j].compareTo(array[j+1])>0)
-                {
+    public static <T extends Comparable<T>> void sortArrays(T[] array) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array.length - i - 1; j++) {
+                if (array[j].compareTo(array[j + 1]) > 0) {
                     T obj = array[j];
-                    array[j]=array[j+1];
-                    array[j+1]=obj;
+                    array[j] = array[j + 1];
+                    array[j + 1] = obj;
                 }
             }
         }
     }
 
-    public static void sortedSpacesByCriterion(Space[] array, Comparator<Space> comparator)
-    {
-         new SpacesRoomsComparator();
-        for(int i=0;i<array.length;i++)
-        {
-            for(int j=0;j< array.length-i-1;j++)
-            {
-                if(comparator.compare(array[j],array[j+1])<0)
-                {
+    public static void sortedSpacesByCriterion(Space[] array, Comparator<Space> comparator) {
+        new SpacesRoomsComparator();
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array.length - i - 1; j++) {
+                if (comparator.compare(array[j], array[j + 1]) < 0) {
                     Space obj = array[j];
-                    array[j]=array[j+1];
-                    array[j+1]=obj;
+                    array[j] = array[j + 1];
+                    array[j + 1] = obj;
                 }
             }
         }
     }
 
-    public static void sortedFloorsByCriterion(Floor[] array, Comparator<Floor> comparator)
-    {
-        for(int i=0;i<array.length;i++)
-        {
-            for(int j=0;j< array.length-i-1;j++)
-            {
-                if(comparator.compare(array[j],array[j+1])<0)
-                {
+    public static void sortedFloorsByCriterion(Floor[] array, Comparator<Floor> comparator) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array.length - i - 1; j++) {
+                if (comparator.compare(array[j], array[j + 1]) < 0) {
                     Floor obj = array[j];
-                    array[j]=array[j+1];
-                    array[j+1]=obj;
+                    array[j] = array[j + 1];
+                    array[j + 1] = obj;
                 }
             }
         }
     }
 
-    public static <T> void sortArraysByComparator(T[] array, Comparator<T> comparator)
-    {
+    public static <T> void sortArraysByComparator(T[] array, Comparator<T> comparator) {
 
-        for(int i=0;i<array.length;i++)
-        {
-            for(int j=0;j< array.length-i-1;j++)
-            {
-                if(comparator.compare(array[j],array[j+1])<0)
-                {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array.length - i - 1; j++) {
+                if (comparator.compare(array[j], array[j + 1]) < 0) {
                     T obj = array[j];
-                    array[j]=array[j+1];
-                    array[j+1]=obj;
+                    array[j] = array[j + 1];
+                    array[j + 1] = obj;
                 }
             }
         }
